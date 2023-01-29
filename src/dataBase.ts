@@ -1,5 +1,5 @@
-import { IDateRequest } from "./interfaces";
+import { IList } from "./interfaces";
 
-const database: Array<IDateRequest> = [];
+const database: Array<IList> = [];
 
 export { database };

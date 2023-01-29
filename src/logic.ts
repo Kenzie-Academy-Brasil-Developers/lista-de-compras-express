@@ -16,4 +16,12 @@ const createPurchaseList = (
   return res.status(201).json(newItem);
 };
 
-export { createPurchaseList };
+const listPurchaseList = (req: Request, resp: Response): Response => {
+  return resp.status(200).json(database)
+}
+
+const listOneList = ({findListIndex}: Request, resp: Response): Response => {
+  return resp.status(200).json(database[findListIndex])
+}
+
+export { createPurchaseList, listPurchaseList, listOneList };
