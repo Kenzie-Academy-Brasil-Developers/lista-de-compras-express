@@ -7,8 +7,7 @@ declare global {
         listName: string;
         data: string;
       };
-      id: string;
+      findListIndex: number;
     }
   }
 }
-

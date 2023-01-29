@@ -1,33 +1,37 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express"
+import { database } from "./dataBase";
 import { IrequeridKeys, IrequeridKeysData } from "./interfaces";
+ 
 
-const validateData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Response | void => {
-  const keys: Array<string> = Object.keys(req.body);
-  const requeridKeys: Array<IrequeridKeys> = ["listName", "data"];
-  const requeridKeysData: Array<IrequeridKeysData> = ["name", "quantity"];
+const validatedBodyMiddleware = (req: Request, resp: Response, next: NextFunction): Response | void => {
 
-  const validateKeys: boolean = requeridKeys.every((key: string) =>
-    keys.includes(key)
-  );
+  const keys: Array<string> = Object.keys(req.body)
+  const requiredKeys: Array<IrequeridKeys> = ["listName", "data"]
+  const requiredData: Array<IrequeridKeysData> = ["name", "quantity"]
 
-  if (!validateKeys) {
-    return res
-      .status(400)
-      .json({ message: `Invalid input - expected ${requeridKeys}` });
+  let validatedKeys: boolean = requiredKeys.every((key: string) => keys.includes(key)) 
+
+  if(req.method === "PATCH"){
+    validatedKeys = requiredKeys.some((key: string) => keys.includes(key)) 
+    req.body = {...database[req.findListIndex], ...req.body}
   }
 
-  const { listName, data } = req.body;
+  if(!validatedKeys){
+    return resp.status(400).json({message: `Required fields are: ${requiredKeys}`})
+  }
+
+  // if(!requiredData.includes(req.body.data)){
+  //   return resp.status(400).json({message:`Required fields are: ${requiredData}` })
+  // }
+
+  const { listName, data } = req.body
 
   req.validatedBody = {
     listName,
-    data,
-  };
+    data
+  }
 
-  return next();
-};
+  next()
+}
 
-export { validateData };
+export {validatedBodyMiddleware}

@@ -3,12 +3,12 @@ interface IDateRequest {
   data: string;
 }
 
-interface IItemId extends IDateRequest {
-  id: string;
+interface IList extends IDateRequest {
+  id: number;
 }
 
 type IrequeridKeys = "listName" | "data";
 
 type IrequeridKeysData = "name" | "quantity";
 
-export { IDateRequest, IItemId, IrequeridKeys, IrequeridKeysData };
+export { IDateRequest, IList, IrequeridKeys, IrequeridKeysData };

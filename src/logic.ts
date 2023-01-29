@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import { database } from "./dataBase";
-import { v4 as uuidv4 } from "uuid";
+import { IList } from "./interfaces";
 
-const createShoppingList =
- ({ validatedBody }: Request, res: Response): Response =>
-  { const newItem = {
-    id: uuidv4(),
-    ...validatedBody
+const createPurchaseList = (
+  { validatedBody }: Request,
+  res: Response
+): Response => {
+  const newItem: IList = {
+    id: new Date().getTime(),
+    ...validatedBody,
   };
 
   database.push(newItem);
 
-  return res.status(201).json(database);
+  return res.status(201).json(newItem);
 };
 
-export { createShoppingList };
+export { createPurchaseList };
