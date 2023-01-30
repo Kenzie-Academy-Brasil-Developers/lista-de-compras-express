@@ -13,14 +13,13 @@ app.use(express.json());
 
 app.post("/purchaseList", validatedBodyMiddleware, createPurchaseList);
 app.get("/purchaseList", listPurchaseList);
-app.get("/purchaseList/:id", ensureListExists, listOneList);
+app.get("/purchaseList/:listId", ensureListExists, listOneList);
 app.patch(
-  "/purchaseList/:id",
+  "/purchaseList/:listId/:name",
   ensureListExists,
-  validatedBodyMiddleware,
   updateList
 );
-app.delete("/purchaseList/:id", ensureListExists, deleteList);
+app.delete("/purchaseList/:listId", ensureListExists, deleteList);
 
 app.listen(3000, () => {
   console.log("Server is running!");

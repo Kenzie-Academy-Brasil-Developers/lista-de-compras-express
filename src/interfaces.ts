@@ -7,7 +7,7 @@ interface IList extends IDateRequest {
   id: number;
 }
 
-export interface IData {
+interface IData {
   name: string;
   quantity: string;
 }
@@ -16,4 +16,4 @@ type IrequeridKeys = "listName" | "data";
 
 type IrequeridKeysData = "name" | "quantity";
 
-export { IDateRequest, IList, IrequeridKeys, IrequeridKeysData };
+export { IDateRequest, IList, IData, IrequeridKeys, IrequeridKeysData };

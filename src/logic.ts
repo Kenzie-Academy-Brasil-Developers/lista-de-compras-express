@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { database } from "./dataBase";
-import { IList } from "./interfaces";
-
+import { IList, IDateRequest, IData } from "./interfaces";
+let element: string;
 const createPurchaseList = (
   { validatedBody }: Request,
   res: Response
@@ -26,22 +26,54 @@ const listOneList = ({ findListIndex }: Request, resp: Response): Response => {
   return resp.status(200).json(database[findListIndex]);
 };
 
-const updateList = (
-  { validatedBody, findListIndex }: Request,
-  resp: Response
-): Response => {
-  database[findListIndex] = { ...database[findListIndex], ...validatedBody };
+const updateList = (req: Request, resp: Response) => {
+  try {
+    const { listId, name } = req.params;
+    let indexList = 0;
+    let list = database.find((el, index) => {
+      if (el.id == parseInt(listId)) {
+        indexList = index;
+        return true;
+      }
+      return false;
+    }) as IList;
 
-  return resp.status(200).json(database[findListIndex]);
+    const { id, listName, data } = list;
+
+    let indexProd = 0;
+    const prod = data.find((el, index) => {
+      if (el.name === name) {
+        indexProd = index;
+        return true;
+      }
+
+      return false;
+    });
+
+    if (!prod) {
+      return resp.status(404).json("Not found product");
+    }
+
+    list.data[indexProd] = { ...prod, ...req.body }
+    database[indexList] = list;
+
+    return resp.status(200).json(list);
+  } catch (error) {
+    console.log(error);
+    return resp.status(400).json();
+  }
 };
 
-export const deleteList = (
-  { findListIndex }: Request,
-  resp: Response
-): Response => {
+const deleteList = ({ findListIndex }: Request, resp: Response): Response => {
   database.splice(findListIndex, 1);
 
   return resp.status(204).json();
 };
 
-export { createPurchaseList, listPurchaseList, listOneList, updateList };
+export {
+  createPurchaseList,
+  listPurchaseList,
+  listOneList,
+  updateList,
+  deleteList,
+};

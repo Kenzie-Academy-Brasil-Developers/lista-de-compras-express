@@ -12,3 +12,15 @@ declare global {
     }
   }
 }
+
+
+declare global {
+  namespace Express {
+    interface Request {
+      validatedBodyData: {
+        name: string;
+        quantity: string;
+      };
+    }
+  }
+}
