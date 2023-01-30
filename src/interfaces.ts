@@ -9,7 +9,7 @@ interface IList extends IDateRequest {
 
 export interface IData {
   name: string;
-  quantity: string
+  quantity: string;
 }
 
 type IrequeridKeys = "listName" | "data";
