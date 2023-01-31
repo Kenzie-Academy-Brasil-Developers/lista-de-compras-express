@@ -46,16 +46,16 @@ const validatedBodyMiddleware = (
     return requiredKeysData.every((key: string) => keysData.includes(key));
   });
 
-  if (typeOfDataItem === "false") {
-    return resp
-      .status(400)
-      .json({ message: "The name or quantity need to be a string" });
-  }
-
   if (!validateData) {
     return resp
       .status(400)
       .json({ message: `Required fields are:${requiredKeysData}` });
+  }
+
+  if (typeOfDataItem === "false") {
+    return resp
+      .status(400)
+      .json({ message: "The name or quantity need to be a string" });
   }
 
   if (lengthDataItem > 2 || lengthDataItem <= 0) {
