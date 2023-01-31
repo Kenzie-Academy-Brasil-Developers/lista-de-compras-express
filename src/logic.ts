@@ -8,12 +8,11 @@ const createPurchaseList = (
   { validatedBody }: Request,
   res: Response
 ): Response => {
-  
   const newItem: IList = {
     id: increment++,
     ...validatedBody,
   };
-
+ 
   database.push(newItem);
 
   return res.status(201).json(newItem);

@@ -10,33 +10,9 @@ const validatedBodyMiddleware = (
   const keys: Array<string> = Object.keys(req.body);
   const keysValue: Array<string> = Object.values(req.body);
   const keysDataArray: Array<IData> = req.body.data;
-console.log(keysValue[0]);
 
   const requiredKeys: Array<IrequeridKeys> = ["listName", "data"];
   const requiredKeysData: Array<IrequeridKeysData> = ["name", "quantity"];
-
-  const keysDataReturn = keysDataArray.map((item) => {
-
-    const keysData = Object.keys(item);
-    const validaData = requiredKeysData.every((key: string) =>
-      keysData.includes(key)
-    );
-   
-    if(!validaData){
-      resp
-      .status(400)
-      .json({ message: `Required fields are:${requiredKeysData}` });
-    }
-
-    const lengthData = keysData.length
-
-    if(lengthData > 2){
-      resp
-      .status(400)
-      .json({ message: `Required fields are:${requiredKeysData}` });
-    }
-    
-  });
 
   let validatedKeys: boolean = requiredKeys.every((key: string) =>
     keys.includes(key)
@@ -46,6 +22,46 @@ console.log(keysValue[0]);
     return resp
       .status(400)
       .json({ message: `Required fields are:${requiredKeys}` });
+  }
+
+  if (typeof keysValue[0] !== "string") {
+    return resp
+      .status(400)
+      .json({ message: "The list name need to be a string" });
+  }
+
+  let lengthDataItem = 0;
+  let typeOfDataItem = "";
+
+  const validateData = keysDataArray.every((item) => {
+    const keysData = Object.keys(item);
+    lengthDataItem = keysData.length;
+    const name = typeof item.name;
+    const quantity = typeof item.quantity;
+
+    if (name !== "string" || quantity !== "string") {
+      typeOfDataItem = "false";
+    }
+
+    return requiredKeysData.every((key: string) => keysData.includes(key));
+  });
+
+  if (typeOfDataItem === "false") {
+    return resp
+      .status(400)
+      .json({ message: "The name or quantity need to be a string" });
+  }
+
+  if (!validateData) {
+    return resp
+      .status(400)
+      .json({ message: `Required fields are:${requiredKeysData}` });
+  }
+
+  if (lengthDataItem > 2 || lengthDataItem <= 0) {
+    return resp
+      .status(400)
+      .json({ message: `Required fields are:${requiredKeysData}` });
   }
 
   const { listName, data } = req.body;
