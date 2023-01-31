@@ -1,4 +1,4 @@
-import { IDateRequest, IList } from "./interfaces";
+import { IList } from "./interfaces";
 
 const database: Array<IList> = [];
 

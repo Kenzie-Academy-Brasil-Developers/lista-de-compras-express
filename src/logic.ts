@@ -29,33 +29,33 @@ const listOneList = ({ findListIndex }: Request, resp: Response): Response => {
 const updateList = (req: Request, resp: Response): Response => {
   const { listId, name } = req.params;
   let indexList = 0;
-  let list = database.find((el, index) => {
-    if (el.id == parseInt(listId)) {
+  let listForId = database.find((list, index) => {
+    if (list.id == parseInt(listId)) {
       indexList = index;
       return true;
     }
     return false;
   }) as IList;
 
-  const { data } = list;
+  const { data } = listForId;
 
-  let indexProd = 0;
-  const prod = data.find((el, index) => {
+  let indexItem = 0;
+  const item = data.find((el, index) => {
     if (el.name === name) {
-      indexProd = index;
+      indexItem = index;
       return true;
     }
     return false;
   });
 
-  if (!prod) {
-    return resp.status(404).json("Not found product");
+  if (!item) {
+    return resp.status(404).json(`Item with name ${name} does not exist`);
   }
 
-  list.data[indexProd] = { ...prod, ...req.body };
-  database[indexList] = list;
+  listForId.data[indexItem] = { ...item, ...req.body };
+  database[indexList] = listForId;
 
-  return resp.status(200).json(list);
+  return resp.status(200).json(listForId);
 };
 
 const deleteList = ({ findListIndex }: Request, resp: Response): Response => {
@@ -67,17 +67,17 @@ const deleteList = ({ findListIndex }: Request, resp: Response): Response => {
 const deleteItem = (req: Request, resp: Response): Response => {
   const { listId, name } = req.params;
   let indexList = 0;
-  let list = database.find((el, index) => {
-    if (el.id == parseInt(listId)) {
+  let listForId = database.find((list, index) => {
+    if (list.id == parseInt(listId)) {
       indexList = index;
       return true;
     }
     return false;
   }) as IList;
 
-  list.data = list.data.filter((item) => item.name !== name);
+  listForId.data = listForId.data.filter((item) => item.name !== name);
 
-  database[indexList] = list;
+  database[indexList] = listForId;
 
   return resp.status(204).json();
 };
