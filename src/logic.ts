@@ -2,14 +2,15 @@ import { Request, Response } from "express";
 import { database } from "./dataBase";
 import { IList } from "./interfaces";
 
+let increment = 1;
+
 const createPurchaseList = (
   { validatedBody }: Request,
   res: Response
 ): Response => {
-  const dataBaseLength = database.length;
-
+  
   const newItem: IList = {
-    id: dataBaseLength + 1,
+    id: increment++,
     ...validatedBody,
   };
 

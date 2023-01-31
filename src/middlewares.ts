@@ -8,7 +8,9 @@ const validatedBodyMiddleware = (
   next: NextFunction
 ): Response | void => {
   const keys: Array<string> = Object.keys(req.body);
+  const keysValue: Array<string> = Object.values(req.body);
   const keysDataArray: Array<IData> = req.body.data;
+console.log(keysValue[0]);
 
   const requiredKeys: Array<IrequeridKeys> = ["listName", "data"];
   const requiredKeysData: Array<IrequeridKeysData> = ["name", "quantity"];
