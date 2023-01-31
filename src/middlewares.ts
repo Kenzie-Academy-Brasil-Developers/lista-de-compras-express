@@ -8,18 +8,33 @@ const validatedBodyMiddleware = (
   next: NextFunction
 ): Response | void => {
   const keys: Array<string> = Object.keys(req.body);
-  const keysData: Array<IData> = req.body.data;
+  const keysDataArray: Array<IData> = req.body.data;
 
   const requiredKeys: Array<IrequeridKeys> = ["listName", "data"];
   const requiredKeysData: Array<IrequeridKeysData> = ["name", "quantity"];
 
-  const keysDataArray = keysData.map((item) => Object.keys(item));
+  const keysDataReturn = keysDataArray.map((item) => {
 
-  const keyVerifica: string[] | undefined = keysDataArray.find(
-    (key) => key !== requiredKeysData
-  );
+    const keysData = Object.keys(item);
+    const validaData = requiredKeysData.every((key: string) =>
+      keysData.includes(key)
+    );
+   
+    if(!validaData){
+      resp
+      .status(400)
+      .json({ message: `Required fields are:${requiredKeysData}` });
+    }
 
-  const verificaArray = keyVerifica === requiredKeysData;
+    const lengthData = keysData.length
+
+    if(lengthData > 2){
+      resp
+      .status(400)
+      .json({ message: `Required fields are:${requiredKeysData}` });
+    }
+    
+  });
 
   let validatedKeys: boolean = requiredKeys.every((key: string) =>
     keys.includes(key)
