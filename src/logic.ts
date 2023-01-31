@@ -12,7 +12,7 @@ const createPurchaseList = (
     id: increment++,
     ...validatedBody,
   };
- 
+
   database.push(newItem);
 
   return res.status(201).json(newItem);
@@ -74,6 +74,12 @@ const deleteItem = (req: Request, resp: Response): Response => {
     }
     return false;
   }) as IList;
+
+  const validateItem = listForId.data.filter((item) => item.name === name)
+  
+  if (validateItem.length <= 0) {
+    return resp.status(404).json(`Item with name ${name} does not exist`);
+  }
 
   listForId.data = listForId.data.filter((item) => item.name !== name);
 
